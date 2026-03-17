@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(uuid())
+  email             String    @unique
+  password          String
+  name              String
+  avatar            String?
+  resetToken        String?
+  resetTokenExpiry  DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  pages             Page[]
+}
+
+model Page {
+  id                String    @id @default(uuid())
+  title             String    @default("Untitled")
+  icon              String?
+  cover             String?
+  content           Json?
+  userId            String
+  parentId          String?
+  isDeleted         Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent            Page?     @relation("PageChildren", fields: [parentId], references: [id])
+  children          Page[]    @relation("PageChildren")
+}
