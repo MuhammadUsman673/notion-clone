@@ -49,46 +49,60 @@ export default function PageItem({ page, allPages, depth = 0 }: Props) {
           style={{
             background: 'none', border: 'none', cursor: 'pointer',
             color: 'var(--text-tertiary)', padding: '1px', display: 'flex',
-            transition: 'transform 0.15s',
+            flexShrink: 0,
           }}
         >
           <ChevronRight size={12} style={{ transform: isOpen ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s' }} />
         </button>
-        <span style={{ fontSize: '13px' }}>{page.icon || '📄'}</span>
+        <span style={{ fontSize: '13px', flexShrink: 0 }}>{page.icon || '📄'}</span>
         <span style={{
           fontSize: '13.5px', color: 'var(--text-primary)', flex: 1,
           overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
         }}>
           {page.title || 'Untitled'}
         </span>
-        {isHovered && (
-          <div style={{ display: 'flex', gap: '2px' }}>
-            <button onClick={handleCreate} style={{
-              background: 'none', border: 'none', cursor: 'pointer',
-              color: 'var(--text-tertiary)', padding: '2px', borderRadius: '3px',
-              display: 'flex',
-            }}
-              onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'}
-              onMouseLeave={e => e.currentTarget.style.color = 'var(--text-tertiary)'}
-            >
-              <Plus size={12} />
-            </button>
-            <button onClick={handleDelete} style={{
-              background: 'none', border: 'none', cursor: 'pointer',
-              color: 'var(--text-tertiary)', padding: '2px', borderRadius: '3px',
-              display: 'flex',
-            }}
-              onMouseEnter={e => e.currentTarget.style.color = '#ff6b6b'}
-              onMouseLeave={e => e.currentTarget.style.color = 'var(--text-tertiary)'}
-            >
-              <Trash2 size={12} />
-            </button>
-          </div>
-        )}
+        {/* Always show on mobile, hover on desktop */}
+        <div className="page-actions" style={{ display: 'flex', gap: '2px' }}>
+          <button onClick={handleCreate} style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: 'var(--text-tertiary)', padding: '2px', borderRadius: '3px',
+            display: 'flex',
+          }}
+            onMouseEnter={e => e.currentTarget.style.color = 'var(--text-primary)'}
+            onMouseLeave={e => e.currentTarget.style.color = 'var(--text-tertiary)'}
+          >
+            <Plus size={12} />
+          </button>
+          <button onClick={handleDelete} style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: 'var(--text-tertiary)', padding: '2px', borderRadius: '3px',
+            display: 'flex',
+          }}
+            onMouseEnter={e => e.currentTarget.style.color = '#ff6b6b'}
+            onMouseLeave={e => e.currentTarget.style.color = 'var(--text-tertiary)'}
+          >
+            <Trash2 size={12} />
+          </button>
+        </div>
       </div>
       {isOpen && children.map((child) => (
         <PageItem key={child.id} page={child} allPages={allPages} depth={depth + 1} />
       ))}
+
+      <style>{`
+        .page-actions {
+          display: none;
+        }
+        div:hover > div > .page-actions,
+        .page-actions:hover {
+          display: flex;
+        }
+        @media (max-width: 768px) {
+          .page-actions {
+            display: flex !important;
+          }
+        }
+      `}</style>
     </div>
   )
 }

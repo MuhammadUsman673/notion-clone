@@ -22,6 +22,7 @@ export default function SettingsPanel({ onClose }: Props) {
       position: 'fixed', inset: 0, zIndex: 1000,
       background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: '16px',
     }} onClick={onClose}>
       <div style={{
         width: '100%', maxWidth: '480px', background: 'var(--bg-secondary)',
@@ -29,7 +30,6 @@ export default function SettingsPanel({ onClose }: Props) {
         boxShadow: '0 24px 64px rgba(0,0,0,0.5)', overflow: 'hidden',
       }} onClick={e => e.stopPropagation()}>
 
-        {/* Header */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '16px 20px', borderBottom: '1px solid var(--border)',
@@ -47,12 +47,10 @@ export default function SettingsPanel({ onClose }: Props) {
         </div>
 
         <div style={{ padding: '20px' }}>
-          {/* Account section */}
           <p style={{ fontSize: '11px', fontWeight: '600', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>
             Account
           </p>
 
-          {/* Avatar + name */}
           <div style={{
             display: 'flex', alignItems: 'center', gap: '14px',
             padding: '14px', background: 'var(--bg-active)', borderRadius: '10px',
@@ -66,17 +64,16 @@ export default function SettingsPanel({ onClose }: Props) {
             }}>
               {user?.name?.charAt(0).toUpperCase() || 'U'}
             </div>
-            <div>
-              <p style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-primary)' }}>
+            <div style={{ minWidth: 0 }}>
+              <p style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {user?.name || 'User'}
               </p>
-              <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '2px' }}>
+              <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {user?.email || ''}
               </p>
             </div>
           </div>
 
-          {/* Info rows */}
           {[
             { icon: User, label: 'Name', value: user?.name || '—' },
             { icon: Mail, label: 'Email', value: user?.email || '—' },
@@ -90,11 +87,10 @@ export default function SettingsPanel({ onClose }: Props) {
                 <Icon size={14} style={{ color: 'var(--text-tertiary)' }} />
                 <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>{label}</span>
               </div>
-              <span style={{ fontSize: '13px', color: 'var(--text-primary)' }}>{value}</span>
+              <span style={{ fontSize: '13px', color: 'var(--text-primary)', maxWidth: '60%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{value}</span>
             </div>
           ))}
 
-          {/* Theme toggle */}
           <div style={{ marginTop: '20px', marginBottom: '8px' }}>
             <p style={{ fontSize: '11px', fontWeight: '600', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>
               Appearance
@@ -109,7 +105,6 @@ export default function SettingsPanel({ onClose }: Props) {
                   {theme === 'dark' ? 'Dark mode' : 'Light mode'}
                 </span>
               </div>
-              {/* Toggle switch */}
               <div
                 onClick={toggleTheme}
                 style={{
@@ -130,7 +125,6 @@ export default function SettingsPanel({ onClose }: Props) {
             </div>
           </div>
 
-          {/* Logout button */}
           <button onClick={handleLogout} style={{
             width: '100%', marginTop: '12px', padding: '10px',
             background: 'rgba(255,100,100,0.08)', border: '1px solid rgba(255,100,100,0.2)',

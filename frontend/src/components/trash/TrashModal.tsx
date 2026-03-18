@@ -66,7 +66,7 @@ export default function TrashModal({ onClose }: Props) {
       position: 'fixed', inset: 0, zIndex: 1000,
       background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
       display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-      paddingTop: '120px',
+      padding: '80px 16px 0',
     }} onClick={onClose}>
       <div style={{
         width: '100%', maxWidth: '560px', background: 'var(--bg-secondary)',
@@ -74,7 +74,6 @@ export default function TrashModal({ onClose }: Props) {
         boxShadow: '0 24px 64px rgba(0,0,0,0.5)', overflow: 'hidden',
       }} onClick={e => e.stopPropagation()}>
 
-        {/* Header */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '14px 16px', borderBottom: '1px solid var(--border)',
@@ -94,7 +93,6 @@ export default function TrashModal({ onClose }: Props) {
           </button>
         </div>
 
-        {/* Content */}
         <div style={{ maxHeight: '400px', overflowY: 'auto', padding: '8px' }}>
           {isLoading ? (
             <div style={{ padding: '32px', textAlign: 'center' }}>
@@ -130,7 +128,7 @@ export default function TrashModal({ onClose }: Props) {
                     Deleted {new Date(page.updatedAt).toLocaleDateString()}
                   </p>
                 </div>
-                <div style={{ display: 'flex', gap: '4px' }}>
+                <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
                   <button
                     onClick={() => handleRestore(page.id)}
                     title="Restore"
@@ -173,4 +171,4 @@ export default function TrashModal({ onClose }: Props) {
       </div>
     </div>
   )
-}   
+}

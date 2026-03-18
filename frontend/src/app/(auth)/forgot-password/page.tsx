@@ -13,7 +13,7 @@ export default function ForgotPasswordPage() {
     setIsLoading(true)
     setError('')
     try {
-      const res = await fetch('http://localhost:5000/api/auth/forgot-password', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -34,9 +34,9 @@ export default function ForgotPasswordPage() {
     <div style={{
       minHeight: '100vh', background: 'var(--bg)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontFamily: 'DM Sans, sans-serif',
+      fontFamily: 'DM Sans, sans-serif', padding: '0 16px',
     }}>
-      <div style={{ width: '100%', maxWidth: '360px', padding: '0 24px' }}>
+      <div style={{ width: '100%', maxWidth: '360px' }}>
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <div style={{
             width: '40px', height: '40px', borderRadius: '10px',
