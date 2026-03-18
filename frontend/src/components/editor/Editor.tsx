@@ -121,7 +121,7 @@ export default function Editor({ page }: Props) {
       {/* Cover image */}
       {cover ? (
         <div
-          style={{ position: 'relative', width: '100%', height: '280px' }}
+          style={{ position: 'relative', width: '100%', height: '220px' }}
           onMouseEnter={() => setShowCoverHover(true)}
           onMouseLeave={() => setShowCoverHover(false)}
         >
@@ -164,9 +164,9 @@ export default function Editor({ page }: Props) {
       ) : null}
 
       {/* Page content */}
-      <div style={{ maxWidth: '720px', margin: '0 auto', padding: cover ? '32px 60px 120px' : '60px 60px 120px' }}>
+      <div className="editor-container" style={{ maxWidth: '720px', margin: '0 auto' }}>
 
-        {/* Add cover button (when no cover) */}
+        {/* Add cover button */}
         {!cover && (
           <div style={{ marginBottom: '8px' }}>
             <button
@@ -190,7 +190,6 @@ export default function Editor({ page }: Props) {
           </div>
         )}
 
-        {/* Hidden cover input */}
         <input
           ref={coverInputRef}
           type="file" accept="image/*"
@@ -198,12 +197,13 @@ export default function Editor({ page }: Props) {
           onChange={handleCoverUpload}
         />
 
-        {/* Icon with picker */}
+        {/* Icon */}
         <div ref={emojiRef} style={{ position: 'relative', display: 'inline-block', marginBottom: '16px' }}>
           <div
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            className="editor-icon"
             style={{
-              fontSize: '52px', lineHeight: 1, cursor: 'pointer',
+              lineHeight: 1, cursor: 'pointer',
               borderRadius: '8px', padding: '4px', transition: 'background 0.15s',
               display: 'inline-block',
             }}
@@ -218,8 +218,8 @@ export default function Editor({ page }: Props) {
               <EmojiPicker
                 onEmojiClick={handleEmojiClick}
                 theme={'dark' as any}
-                height={400}
-                width={320}
+                height={350}
+                width={300}
               />
             </div>
           )}
@@ -227,8 +227,9 @@ export default function Editor({ page }: Props) {
 
         {/* Title */}
         <input
+          className="editor-title"
           style={{
-            width: '100%', fontSize: '38px', fontWeight: '700',
+            width: '100%', fontWeight: '700',
             color: 'var(--text-primary)', background: 'transparent',
             border: 'none', outline: 'none', fontFamily: 'DM Sans, sans-serif',
             marginBottom: '8px', display: 'block', lineHeight: '1.2',
@@ -239,7 +240,7 @@ export default function Editor({ page }: Props) {
           onBlur={() => updatePage(page.id, { title })}
         />
 
-        {/* Word count & reading time */}
+        {/* Word count */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
           <span style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
             {wordCount} {wordCount === 1 ? 'word' : 'words'}
@@ -344,6 +345,29 @@ export default function Editor({ page }: Props) {
           </div>
         )}
       </div>
+
+      <style>{`
+        .editor-container {
+          padding: 60px 60px 120px;
+        }
+        .editor-icon {
+          font-size: 52px;
+        }
+        .editor-title {
+          font-size: 38px;
+        }
+        @media (max-width: 768px) {
+          .editor-container {
+            padding: 24px 20px 80px;
+          }
+          .editor-icon {
+            font-size: 36px;
+          }
+          .editor-title {
+            font-size: 26px;
+          }
+        }
+      `}</style>
     </div>
   )
 }

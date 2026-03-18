@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { usePageStore } from '@/store/usePageStore'
 import Editor from '@/components/editor/Editor'
 import AIPanel from '@/components/ai/AIPanel'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, X } from 'lucide-react'
 
 export default function PageDetail() {
   const { pageId } = useParams()
@@ -33,12 +33,12 @@ export default function PageDetail() {
   }
 
   return (
-    <div style={{ display: 'flex', height: '100%' }}>
-      <div style={{ flex: 1, overflowY: 'auto' }}>
+    <div style={{ display: 'flex', height: '100%', position: 'relative' }}>
+      <div style={{ flex: 1, overflowY: 'auto', minWidth: 0 }}>
         {/* Topbar */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'flex-end',
-          padding: '8px 20px', borderBottom: '1px solid var(--border)',
+          padding: '8px 16px', borderBottom: '1px solid var(--border)',
           position: 'sticky', top: 0, background: 'var(--bg)', zIndex: 10,
         }}>
           <button
@@ -57,7 +57,45 @@ export default function PageDetail() {
         </div>
         <Editor page={currentPage} />
       </div>
-      {showAI && <AIPanel onClose={() => setShowAI(false)} />}
+
+      {/* AI Panel - mobile slides in from bottom, desktop from right */}
+      {showAI && (
+        <>
+          {/* Mobile overlay */}
+          <div
+            className="ai-overlay"
+            onClick={() => setShowAI(false)}
+            style={{
+              position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+              zIndex: 40, display: 'none',
+            }}
+          />
+          <div className="ai-panel-wrapper">
+            <AIPanel onClose={() => setShowAI(false)} />
+          </div>
+        </>
+      )}
+
+      <style>{`
+        .ai-panel-wrapper {
+          height: 100%;
+        }
+        @media (max-width: 768px) {
+          .ai-overlay {
+            display: block !important;
+          }
+          .ai-panel-wrapper {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70vh;
+            z-index: 50;
+            border-radius: 16px 16px 0 0;
+            overflow: hidden;
+          }
+        }
+      `}</style>
     </div>
   )
 }
