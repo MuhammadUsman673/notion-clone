@@ -1,9 +1,8 @@
-
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePageStore } from '@/store/usePageStore'
-import { Search, X, FileText } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 
 interface Props { onClose: () => void }
 
@@ -37,7 +36,7 @@ export default function SearchModal({ onClose }: Props) {
       position: 'fixed', inset: 0, zIndex: 1000,
       background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
       display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-      paddingTop: '120px',
+      padding: '80px 16px 0',
     }} onClick={onClose}>
       <div style={{
         width: '100%', maxWidth: '560px', background: 'var(--bg-secondary)',
@@ -45,7 +44,6 @@ export default function SearchModal({ onClose }: Props) {
         boxShadow: '0 24px 64px rgba(0,0,0,0.5)', overflow: 'hidden',
       }} onClick={e => e.stopPropagation()}>
 
-        {/* Search input */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: '12px',
           padding: '14px 16px', borderBottom: '1px solid var(--border)',
@@ -69,7 +67,6 @@ export default function SearchModal({ onClose }: Props) {
           </button>
         </div>
 
-        {/* Results */}
         <div style={{ maxHeight: '360px', overflowY: 'auto', padding: '8px' }}>
           {filtered.length === 0 ? (
             <div style={{ padding: '32px', textAlign: 'center' }}>
@@ -103,7 +100,6 @@ export default function SearchModal({ onClose }: Props) {
           )}
         </div>
 
-        {/* Footer hint */}
         <div style={{
           padding: '8px 16px', borderTop: '1px solid var(--border)',
           display: 'flex', gap: '16px',
