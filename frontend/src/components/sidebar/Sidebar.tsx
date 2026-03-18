@@ -7,9 +7,9 @@ import PageItem from './PageItem'
 import SearchModal from '../search/SearchModal'
 import SettingsPanel from '../settings/SettingsPanel'
 import TrashModal from '../trash/TrashModal'
-import { Plus, LogOut, FileText, Search, Settings, Trash2 } from 'lucide-react'
+import { Plus, LogOut, FileText, Search, Settings, Trash2, X } from 'lucide-react'
 
-export default function Sidebar() {
+export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const router = useRouter()
   const { user, logout, checkAuth } = useAuthStore()
   const { pages, fetchPages, createPage } = usePageStore()
@@ -22,7 +22,6 @@ export default function Sidebar() {
     fetchPages()
   }, [])
 
-  // Cmd+K / Ctrl+K shortcut
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -37,6 +36,7 @@ export default function Sidebar() {
   const handleCreatePage = async () => {
     const page = await createPage()
     router.push(`/${page.id}`)
+    onClose?.()
   }
 
   const rootPages = pages.filter((p) => !p.parentId)
@@ -53,11 +53,11 @@ export default function Sidebar() {
         flexShrink: 0,
       }}>
         {/* Workspace header */}
-        <div style={{ padding: '12px 8px 4px' }}>
+        <div style={{ padding: '12px 8px 4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{
             display: 'flex', alignItems: 'center', gap: '8px',
             padding: '6px 8px', borderRadius: '6px', cursor: 'pointer',
-            transition: 'background 0.15s',
+            transition: 'background 0.15s', flex: 1,
           }}
             onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-hover)')}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
@@ -74,6 +74,16 @@ export default function Sidebar() {
               {user?.name ? `${user.name}'s space` : 'My space'}
             </span>
           </div>
+          {/* Mobile close button */}
+          {onClose && (
+            <button onClick={onClose} className="sidebar-close-btn" style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              color: 'var(--text-tertiary)', padding: '6px', borderRadius: '6px',
+              display: 'none', alignItems: 'center',
+            }}>
+              <X size={16} />
+            </button>
+          )}
         </div>
 
         {/* Nav items */}
@@ -170,6 +180,14 @@ export default function Sidebar() {
       {showSearch && <SearchModal onClose={() => setShowSearch(false)} />}
       {showSettings && <SettingsPanel onClose={() => setShowSettings(false)} />}
       {showTrash && <TrashModal onClose={() => setShowTrash(false)} />}
+
+      <style>{`
+        @media (max-width: 768px) {
+          .sidebar-close-btn {
+            display: flex !important;
+          }
+        }
+      `}</style>
     </>
   )
 }
