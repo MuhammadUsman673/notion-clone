@@ -15,14 +15,14 @@ const httpServer = createServer(app)
 
 const io = new Server(httpServer, {
   cors: {
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'https://notion-clone-pi-nine.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true
   }
 })
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'https://notion-clone-pi-nine.vercel.app'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -41,12 +41,15 @@ app.get('/health', (req, res) => {
 
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id)
+
   socket.on('join-page', (pageId: string) => {
     socket.join(pageId)
   })
+
   socket.on('page-update', (data: { pageId: string; content: any }) => {
     socket.to(data.pageId).emit('page-updated', data.content)
   })
+
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id)
   })
