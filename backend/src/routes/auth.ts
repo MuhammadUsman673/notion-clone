@@ -2,18 +2,11 @@ import { Router, Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
-import nodemailer from 'nodemailer'
+import { Resend } from 'resend'
 import { prisma } from '../lib/prisma'
 
 const router = Router()
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-})
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 router.post('/signup', async (req: Request, res: Response) => {
   try {
@@ -82,7 +75,6 @@ router.post('/google', async (req: Request, res: Response) => {
   }
 })
 
-// Forgot password - send reset email
 router.post('/forgot-password', async (req: Request, res: Response) => {
   try {
     const { email } = req.body
@@ -90,12 +82,11 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
 
     const user = await prisma.user.findUnique({ where: { email } })
     if (!user) {
-      // Don't reveal if email exists
       return res.json({ message: 'If that email exists, a reset link has been sent.' })
     }
 
     const resetToken = crypto.randomBytes(32).toString('hex')
-    const resetTokenExpiry = new Date(Date.now() + 1000 * 60 * 60) // 1 hour
+    const resetTokenExpiry = new Date(Date.now() + 1000 * 60 * 60)
 
     await prisma.user.update({
       where: { email },
@@ -104,8 +95,8 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
 
     const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}`
 
-    await transporter.sendMail({
-      from: `"Notion Clone" <${process.env.EMAIL_USER}>`,
+    await resend.emails.send({
+      from: 'Notion Clone <onboarding@resend.dev>',
       to: email,
       subject: 'Reset your password',
       html: `
@@ -127,7 +118,6 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
   }
 })
 
-// Reset password with token
 router.post('/reset-password', async (req: Request, res: Response) => {
   try {
     const { token, password } = req.body
